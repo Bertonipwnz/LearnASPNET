@@ -14,7 +14,17 @@
 		[HttpGet]
 		public string GetUserName()
 		{
-			return "My user name";
+			return "Bertonipwnz";
+		}
+
+		/// <summary>
+		/// Получает имя пользователя.
+		/// </summary>
+		/// <returns>Строковое представления пользователя.</returns>
+		[HttpGet]
+		public string GetUserName1()
+		{
+			return "Bertonipwnz2";
 		}
 	}
 }
