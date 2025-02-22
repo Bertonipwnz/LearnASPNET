@@ -1,30 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-namespace LearnASPNETMVC.Controllers
+﻿namespace LearnASPNETMVC.Controllers
 {
-    public class HomeController : Controller
-    {
-        public ActionResult Index()
-        {
-            return View();
-        }
+	using Models;
+	using System.Net.Http;
+	using System.Threading.Tasks;
+	using System.Web;
+	using System.Web.Mvc;
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
+	/// <summary>
+	/// Контроллер представления view - home.
+	/// </summary>
+	public class HomeController : Controller
+	{
+		#region Public Methods
 
-            return View();
-        }
+		public async Task<ActionResult> Index()
+		{
+			User user = await GetUserAsync();
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
+			return View(user);
+		}
 
-            return View();
-        }
-    }
+		public ActionResult About()
+		{
+			ViewBag.Message = "Your application description page.";
+
+			return View();
+		}
+
+		public ActionResult Contact()
+		{
+			ViewBag.Message = "Your contact page.";
+
+			return View();
+		}
+
+		#endregion Public Methods
+
+		#region Private Methods
+
+		/// <summary>
+		/// Получает экземпляр пользователя.
+		/// </summary>
+		/// <returns>Модель пользователя.</returns>
+		private async Task<User> GetUserAsync()
+		{
+			User user = new User();
+
+			using (HttpClient client = new HttpClient())
+			{
+				client.BaseAddress = new System.Uri("https://localhost:44330/");
+
+				HttpResponseMessage response = await client.GetAsync("api/app/GetUserName");
+
+				user.UserName = response.IsSuccessStatusCode ? await response.Content.ReadAsStringAsync() : string.Empty;
+			};
+
+			return user;
+		}
+			
+		#endregion Private Methods
+	}
 }
