@@ -16,15 +16,5 @@
 		{
 			return "Bertonipwnz";
 		}
-
-		/// <summary>
-		/// Получает имя пользователя.
-		/// </summary>
-		/// <returns>Строковое представления пользователя.</returns>
-		[HttpGet]
-		public string GetUserName1()
-		{
-			return "Bertonipwnz2";
-		}
 	}
 }
