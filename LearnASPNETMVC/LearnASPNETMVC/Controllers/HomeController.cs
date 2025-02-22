@@ -1,9 +1,10 @@
 ﻿namespace LearnASPNETMVC.Controllers
 {
+	using LearnASPNETMVC.Models.Db;
 	using Models;
+	using System.Data.Entity;
 	using System.Net.Http;
 	using System.Threading.Tasks;
-	using System.Web;
 	using System.Web.Mvc;
 
 	/// <summary>
@@ -15,7 +16,17 @@
 
 		public async Task<ActionResult> Index()
 		{
-			User user = await GetUserAsync();
+			string userName = await GetUserNameAsync();
+
+			User user = await GetUserFromNameAsync(userName);
+
+			if(user == null)
+			{
+				user = await AddUserAsync(new User
+				{
+					UserName = userName,
+				});
+			}
 
 			return View(user);
 		}
@@ -39,12 +50,28 @@
 		#region Private Methods
 
 		/// <summary>
-		/// Получает экземпляр пользователя.
+		/// Добавление пользователя в таблицу.
 		/// </summary>
-		/// <returns>Модель пользователя.</returns>
-		private async Task<User> GetUserAsync()
+		/// <param name="user">Модель пользователя.</param>
+		/// <returns>Модель добавленного пользователя.</returns>
+		private async Task<User> AddUserAsync(User user)
 		{
-			User user = new User();
+			using (var appContext = new AppContext())
+			{
+				appContext.Users.Add(user);
+				await appContext.SaveChangesAsync();
+			}
+
+			return user;
+		}
+
+		/// <summary>
+		/// Получает имя пользователя.
+		/// </summary>
+		/// <returns>Имя пользователя.</returns>
+		private async Task<string> GetUserNameAsync()
+		{
+			string userName = string.Empty;
 
 			using (HttpClient client = new HttpClient())
 			{
@@ -52,10 +79,27 @@
 
 				HttpResponseMessage response = await client.GetAsync("api/app/GetUserName");
 
-				user.UserName = response.IsSuccessStatusCode ? await response.Content.ReadAsStringAsync() : string.Empty;
+				userName = response.IsSuccessStatusCode ? await response.Content.ReadAsStringAsync() : string.Empty;
 			};
 
-			return user;
+			return userName;
+		}
+
+		/// <summary>
+		/// Получает пользователя из базы по имени.
+		/// </summary>
+		/// <param name="userName">Имя пользователя.</param>
+		/// <returns>Модель пользователя.</returns>
+		private async Task<User> GetUserFromNameAsync(string userName)
+		{
+			User userModel = null;
+
+			using (var appContext = new AppContext())
+			{
+				userModel = await appContext.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == userName.ToLower());
+			}
+
+			return userModel;
 		}
 			
 		#endregion Private Methods
