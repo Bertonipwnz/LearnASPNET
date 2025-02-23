@@ -45,7 +45,7 @@
 		public ActionResult Buy(int id)
 		{
 			// Сохраняем идентификатор книги в ViewBag для передачи в представление
-			ViewBag.BoolId = id;
+			ViewBag.BookId = id;
 
 			return View();
 		}
