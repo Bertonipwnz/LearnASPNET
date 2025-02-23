@@ -3,7 +3,7 @@
 	using System.Web.Mvc;
 
 	/// <summary>
-	/// Результат действий.
+	/// Результат действий по получению HTML.
 	/// </summary>
 	public class HtmlResult : ActionResult
 	{

@@ -45,6 +45,15 @@
 		}
 
 		/// <summary>
+		/// Метод действия по получению изображения.
+		/// </summary>
+		public ActionResult GetImage()
+		{
+			string path = "../Images/visualstudio.png";
+			return new ImageResult(path);
+		}
+
+		/// <summary>
 		/// Отображает страницу покупки книги,
 		/// используется для отображения страницы с конкретной книгой по её идентификатору.
 		/// </summary>
