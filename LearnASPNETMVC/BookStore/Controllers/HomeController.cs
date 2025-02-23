@@ -53,6 +53,11 @@
 			return new ImageResult(path);
 		}
 
+		public ViewResult IndexHtml()
+		{
+			return View("~/Views/Shared/Error.cshtml");
+		}
+
 		/// <summary>
 		/// Отображает страницу покупки книги,
 		/// используется для отображения страницы с конкретной книгой по её идентификатору.
