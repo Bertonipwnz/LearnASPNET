@@ -1,6 +1,7 @@
 ﻿namespace BookStore.Controllers
 {
 	using BookStore.Models;
+	using System;
 	using System.Collections.Generic;
 	using System.Web.Mvc;
 
@@ -20,12 +21,55 @@
 
 		#region Public Methods
 
+		/// <summary>
+		/// Отображает страницу.
+		/// </summary>
 		public ActionResult Index()
 		{
+			// Извлекаем все книги из контекста базы данных
 			IEnumerable<Book> books = _bookContext.Books;
+
+			// Передаем список книг в представление через ViewBag
 			ViewBag.Books = books;
 
 			return View();
+		}
+
+		/// <summary>
+		/// Отображает страницу покупки книги,
+		/// используется для отображения страницы с конкретной книгой по её идентификатору.
+		/// </summary>
+		/// <param name="id">Идентификатор книги, выбранной для покупки.</param>
+		/// <returns>Представление с информацией о книге для покупки.</returns>
+		[HttpGet]
+		public ActionResult Buy(int id)
+		{
+			// Сохраняем идентификатор книги в ViewBag для передачи в представление
+			ViewBag.BoolId = id;
+
+			return View();
+		}
+
+		/// <summary>
+		/// Обрабатывает покупку книги,
+		/// сохраняет информацию о покупке в базе данных и возвращает сообщение об успешной покупке.
+		/// </summary>
+		/// <param name="purchase">Информация о покупке, включающая данные покупателя и книги.</param>
+		/// <returns>Сообщение, подтверждающее успешную покупку.</returns>
+		[HttpPost]
+		public string Buy(Purchase purchase)
+		{
+			// Устанавливаем дату покупки
+			purchase.Date = DateTime.Now;
+
+			// Добавляем покупку в контекст базы данных
+			_bookContext.Purchases.Add(purchase);
+
+			// Сохраняем изменения в базе данных
+			_bookContext.SaveChanges();
+
+			// Возвращаем сообщение с благодарностью
+			return "Спасибо," + purchase.Person + ", за покупку!";
 		}
 
 		#endregion Public Methods
