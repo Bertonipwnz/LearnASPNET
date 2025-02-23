@@ -62,7 +62,7 @@
 			string file_path = Server.MapPath("~/Assets/test.png");
 			// Тип файла - content-type
 			string file_type = "application/png";
-			// Имя файла - необязательно
+			
 			string file_name = "PDFIcon.png";
 			return File(file_path, file_type, file_name);
 		}
