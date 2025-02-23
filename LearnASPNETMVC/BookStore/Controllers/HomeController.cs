@@ -54,6 +54,20 @@
 		}
 
 		/// <summary>
+		/// Метод действия получение файла.
+		/// </summary>
+		public FileResult GetFile()
+		{
+			// Путь к файлу
+			string file_path = Server.MapPath("~/test.png");
+			// Тип файла - content-type
+			string file_type = "application/png";
+			// Имя файла - необязательно
+			string file_name = "PDFIcon.png";
+			return File(file_path, file_type, file_name);
+		}
+
+		/// <summary>
 		/// Метод действия по получению контента.
 		/// </summary>
 		public ViewResult IndexHtml()
