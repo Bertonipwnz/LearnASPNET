@@ -49,7 +49,7 @@
 		/// </summary>
 		public ActionResult GetImage()
 		{
-			string path = "../Images/visualstudio.png";
+			string path = "../Assets/test.png";
 			return new ImageResult(path);
 		}
 
@@ -59,7 +59,7 @@
 		public FileResult GetFile()
 		{
 			// Путь к файлу
-			string file_path = Server.MapPath("~/test.png");
+			string file_path = Server.MapPath("~/Assets/test.png");
 			// Тип файла - content-type
 			string file_type = "application/png";
 			// Имя файла - необязательно
@@ -72,7 +72,7 @@
 		/// </summary>
 		public FileResult GetBytes()
 		{
-			string path = Server.MapPath("~/test.png");
+			string path = Server.MapPath("~/Assets//test.png");
 			byte[] mas = System.IO.File.ReadAllBytes(path);
 			string file_type = "application/png";
 			string file_name = "PDFIcon.png";
