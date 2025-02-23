@@ -1,6 +1,7 @@
 ﻿namespace BookStore.Controllers
 {
 	using BookStore.Models;
+	using BookStore.Util;
 	using System;
 	using System.Collections.Generic;
 	using System.Web.Mvc;
@@ -33,6 +34,14 @@
 			ViewBag.Books = books;
 
 			return View();
+		}
+
+		/// <summary>
+		/// Метод действия по получению HTML.
+		/// </summary>
+		public ActionResult GetHtml()
+		{
+			return new HtmlResult("<h2>Привет мир!</h2>");
 		}
 
 		/// <summary>
