@@ -1,30 +1,33 @@
 ﻿namespace BookStore.Controllers
 {
-	using System;
+	using BookStore.Models;
 	using System.Collections.Generic;
-	using System.Linq;
-	using System.Web;
 	using System.Web.Mvc;
 
+	/// <summary>
+	/// Контроллер Home.
+	/// </summary>
 	public class HomeController : Controller
 	{
+		#region Private Fields
+
+		/// <summary>
+		/// Создает экземпляр контекста.
+		/// </summary>
+		private BookContext _bookContext = new BookContext();
+
+		#endregion Private Fields
+
+		#region Public Methods
+
 		public ActionResult Index()
 		{
-			return View();
-		}
-
-		public ActionResult About()
-		{
-			ViewBag.Message = "Your application description page.";
+			IEnumerable<Book> books = _bookContext.Books;
+			ViewBag.Books = books;
 
 			return View();
 		}
 
-		public ActionResult Contact()
-		{
-			ViewBag.Message = "Your contact page.";
-
-			return View();
-		}
+		#endregion Public Methods
 	}
 }
