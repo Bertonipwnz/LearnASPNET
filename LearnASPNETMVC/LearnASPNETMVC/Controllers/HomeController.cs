@@ -45,6 +45,12 @@
 			return View();
 		}
 
+		[HttpPost]
+		public int CalculateSquare(int a, int h)
+		{
+			return CalculateTriangleSquare(a, h);
+		}
+
 		#endregion Public Methods
 
 		#region Private Methods
@@ -100,6 +106,11 @@
 			}
 
 			return userModel;
+		}
+
+		private int CalculateTriangleSquare(int a, int h)
+		{
+			return (a * h) / 2;
 		}
 			
 		#endregion Private Methods
