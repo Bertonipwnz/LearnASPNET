@@ -1,6 +1,7 @@
 ﻿namespace BookStore.Controllers
 {
 	using BookStore.Models;
+	using BookStore.Util;
 	using System;
 	using System.Collections.Generic;
 	using System.Web.Mvc;
@@ -36,6 +37,82 @@
 		}
 
 		/// <summary>
+		/// Метод действия по получению HTML.
+		/// </summary>
+		public ActionResult GetHtml()
+		{
+			return new HtmlResult("<h2>Привет мир!</h2>");
+		}
+
+		/// <summary>
+		/// Метод действия по получению изображения.
+		/// </summary>
+		public ActionResult GetImage()
+		{
+			string path = "../Images/visualstudio.png";
+			return new ImageResult(path);
+		}
+
+		/// <summary>
+		/// Метод действия получение файла.
+		/// </summary>
+		public FileResult GetFile()
+		{
+			// Путь к файлу
+			string file_path = Server.MapPath("~/test.png");
+			// Тип файла - content-type
+			string file_type = "application/png";
+			// Имя файла - необязательно
+			string file_name = "PDFIcon.png";
+			return File(file_path, file_type, file_name);
+		}
+
+		/// <summary>
+		/// Метод действия по получению контента.
+		/// </summary>
+		public ViewResult IndexHtml()
+		{
+			ViewBag.Head = "Привет мир!";
+			return View("~/Views/Shared/Error.cshtml");
+		}
+
+		/// <summary>
+		/// Метод действия временной переадресации.
+		/// </summary>
+		public RedirectResult TimeRedirect()
+		{
+			return Redirect("/Home/Index");
+		}
+
+		/// <summary>
+		/// Метод действия пермаментной переадресации.
+		/// </summary>
+		/// <remarks>Однако методы RedirectPermanent и RedirectToActionPermanent не 
+		/// рекомендуется использовать, а если и использовать, то с осторожностью.
+		/// Так как неправильно настроенная постоянная переадресация может 
+		/// ухудшить позиции в поисковиках или способствовать полному выпадению сайта из поиска.</remarks>
+		public RedirectResult PermanentRedirect()
+		{
+			return RedirectPermanent("/Home/Index");
+		}
+
+		/// <summary>
+		/// Метод действия переадресации по определенному маршруту вунтри домена.
+		/// </summary>
+		public RedirectToRouteResult RedirectToRouteResult()
+		{
+			return RedirectToRoute(new { controller = "Home", action = "Index" });
+		}
+
+		/// <summary>
+		/// Метод действия переход к действию контролера.
+		/// </summary>
+		public RedirectToRouteResult RedirectToAction()
+		{
+			return RedirectToAction("Square", "Home", new { a = 10, h = 12 });
+		}
+
+		/// <summary>
 		/// Отображает страницу покупки книги,
 		/// используется для отображения страницы с конкретной книгой по её идентификатору.
 		/// </summary>
@@ -44,9 +121,13 @@
 		[HttpGet]
 		public ActionResult Buy(int id)
 		{
+			if (id > 3)
+			{
+				return Redirect("/Home/Index");
+			}
+
 			// Сохраняем идентификатор книги в ViewBag для передачи в представление
 			ViewBag.BookId = id;
-
 			return View();
 		}
 
@@ -70,6 +151,42 @@
 
 			// Возвращаем сообщение с благодарностью
 			return "Спасибо," + purchase.Person + ", за покупку!";
+		}
+
+		/// <summary>
+		/// Вычисляет площадь треугольнка по основанию и высоте.
+		/// </summary>
+		/// <param name="a">Основание.</param>
+		/// <param name="h">Высота.</param>
+		public ContentResult Square(int a, int h)
+		{
+			int s = a * h / 2;
+			return Content("<h2>Площадь треугольника с основанием " + a +
+					" и высотой " + h + " равна " + s + "</h2>");
+		}
+
+		/// <summary>
+		/// Метод действия проверки возраста.
+		/// </summary>
+		/// <param name="age">Возраст.</param>
+		public ActionResult CheckAge(int age)
+		{
+			if (age < 21)
+			{
+				return new HttpStatusCodeResult(404);
+			}
+
+			if (age > 121)
+			{
+				return HttpNotFound();
+			}
+
+			if(age == 25)
+			{
+				return new HttpUnauthorizedResult();
+			}
+
+			return Square(2,2);
 		}
 
 		#endregion Public Methods
