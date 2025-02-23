@@ -54,7 +54,7 @@
 		}
 
 		/// <summary>
-		/// Метод действия получение файла.
+		/// Метод действия отправки файла.
 		/// </summary>
 		public FileResult GetFile()
 		{
@@ -65,6 +65,18 @@
 			// Имя файла - необязательно
 			string file_name = "PDFIcon.png";
 			return File(file_path, file_type, file_name);
+		}
+
+		/// <summary>
+		/// Метод действия отправки массива байтов.
+		/// </summary>
+		public FileResult GetBytes()
+		{
+			string path = Server.MapPath("~/test.png");
+			byte[] mas = System.IO.File.ReadAllBytes(path);
+			string file_type = "application/png";
+			string file_name = "PDFIcon.png";
+			return File(mas, file_type, file_name);
 		}
 
 		/// <summary>
