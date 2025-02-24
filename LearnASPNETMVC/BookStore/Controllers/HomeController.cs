@@ -94,6 +94,36 @@
 		}
 
 		/// <summary>
+		/// Получает данные контекста запроса.
+		/// </summary>
+		public string GetDataContextRequest()
+		{
+			string browser = HttpContext.Request.Browser.Browser;
+			string user_agent = HttpContext.Request.UserAgent;
+			string url = HttpContext.Request.RawUrl;
+			string ip = HttpContext.Request.UserHostAddress;
+			string referrer = HttpContext.Request.UrlReferrer == null ? "" : HttpContext.Request.UrlReferrer.AbsoluteUri;
+			return "<p>Browser: " + browser + "</p><p>User-Agent: " + user_agent + "</p><p>Url запроса: " + url +
+				"</p><p>Реферер: " + referrer + "</p><p>IP-адрес: " + ip + "</p>";
+		}
+
+		/// <summary>
+		/// Получает данные контекста запроса и выдает ответ в виде другой кодировки.
+		/// </summary>
+		public string GetDataContextRequestWithAnotherCharset()
+		{
+			HttpContext.Response.Charset = "iso-8859-2";
+			HttpContext.Response.Write("<h1>Hello World</h1>");
+
+			string user_agent = HttpContext.Request.UserAgent;
+			string url = HttpContext.Request.RawUrl;
+			string ip = HttpContext.Request.UserHostAddress;
+			string referrer = HttpContext.Request.UrlReferrer == null ? "" : HttpContext.Request.UrlReferrer.AbsoluteUri;
+			return "<p>User-Agent: " + user_agent + "</p><p>Url запроса: " + url +
+				"</p><p>Реферер: " + referrer + "</p><p>IP-адрес: " + ip + "</p>";
+		}
+
+		/// <summary>
 		/// Метод действия по получению контента.
 		/// </summary>
 		public ViewResult IndexHtml()
