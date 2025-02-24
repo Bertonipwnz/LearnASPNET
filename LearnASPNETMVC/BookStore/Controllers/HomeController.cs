@@ -5,6 +5,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
+	using System.Security.Policy;
 	using System.Web.Mvc;
 
 	/// <summary>
@@ -33,6 +34,12 @@
 
 			// Передаем список книг в представление через ViewBag
 			ViewBag.Books = books;
+
+			//Установки cookie.
+			HttpContext.Response.Cookies["id"].Value = "ca-4353w";
+
+			//Установка сесси.
+			Session["name"] = "Tom";
 
 			return View();
 		}
@@ -121,6 +128,24 @@
 			string referrer = HttpContext.Request.UrlReferrer == null ? "" : HttpContext.Request.UrlReferrer.AbsoluteUri;
 			return "<p>User-Agent: " + user_agent + "</p><p>Url запроса: " + url +
 				"</p><p>Реферер: " + referrer + "</p><p>IP-адрес: " + ip + "</p>";
+		}
+
+		/// <summary>
+		/// Получает данные по пользователю.
+		/// </summary>
+		public string GetUserData()
+		{
+			string cookieId = HttpContext.Request.Cookies["id"].Value;
+			bool IsAdmin = HttpContext.User.IsInRole("admin"); 
+			bool IsAuth = HttpContext.User.Identity.IsAuthenticated; 
+			string login = HttpContext.User.Identity.Name;
+			string session = (string)Session["name"];
+			
+			//Удаляем значение сессии.
+			Session["name"] = null;
+
+			return "<p>IsAdmin: " + IsAdmin + "</p><p>IsAuth: " + IsAuth +
+				"</p><p>login: " + login + "</p><p> Cookie id: " + cookieId + "</p><p> Session: " + session + "</p>";
 		}
 
 		/// <summary>
