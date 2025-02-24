@@ -5,7 +5,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
-	using System.Security.Policy;
 	using System.Web.Mvc;
 
 	/// <summary>
@@ -23,6 +22,15 @@
 		#endregion Private Fields
 
 		#region Public Methods
+
+		/// <summary>
+		/// Метод действия возвращения частичного представления.
+		/// </summary>
+		public ActionResult Partial()
+		{
+			ViewBag.Message = "Partial view";
+			return PartialView();
+		}
 
 		/// <summary>
 		/// Отображает страницу.
