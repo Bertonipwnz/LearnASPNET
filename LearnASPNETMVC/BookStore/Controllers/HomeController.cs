@@ -4,6 +4,8 @@
 	using BookStore.Util;
 	using System;
 	using System.Collections.Generic;
+	using System.IO;
+	using System.Security.Policy;
 	using System.Web.Mvc;
 
 	/// <summary>
@@ -33,6 +35,12 @@
 			// Передаем список книг в представление через ViewBag
 			ViewBag.Books = books;
 
+			//Установки cookie.
+			HttpContext.Response.Cookies["id"].Value = "ca-4353w";
+
+			//Установка сесси.
+			Session["name"] = "Tom";
+
 			return View();
 		}
 
@@ -49,22 +57,95 @@
 		/// </summary>
 		public ActionResult GetImage()
 		{
-			string path = "../Images/visualstudio.png";
+			string path = "../Assets/test.png";
 			return new ImageResult(path);
 		}
 
 		/// <summary>
-		/// Метод действия получение файла.
+		/// Метод действия отправки файла.
 		/// </summary>
 		public FileResult GetFile()
 		{
 			// Путь к файлу
-			string file_path = Server.MapPath("~/test.png");
+			string file_path = Server.MapPath("~/Assets/test.png");
 			// Тип файла - content-type
 			string file_type = "application/png";
-			// Имя файла - необязательно
+			
 			string file_name = "PDFIcon.png";
 			return File(file_path, file_type, file_name);
+		}
+
+		/// <summary>
+		/// Метод действия отправки массива байтов.
+		/// </summary>
+		public FileResult GetBytes()
+		{
+			string path = Server.MapPath("~/Assets//test.png");
+			byte[] mas = System.IO.File.ReadAllBytes(path);
+			string file_type = "application/png";
+			string file_name = "PDFIcon.png";
+			return File(mas, file_type, file_name);
+		}
+
+		/// <summary>
+		/// Метод действия отправки потока.
+		/// </summary>
+		public FileResult GetStream()
+		{
+			string path = Server.MapPath("~/Assets//test.png");
+
+			FileStream fs = new FileStream(path, FileMode.Open);
+			string file_type = "application/png";
+			string file_name = "PDFIcon.png";
+			return File(fs, file_type, file_name);
+		}
+
+		/// <summary>
+		/// Получает данные контекста запроса.
+		/// </summary>
+		public string GetDataContextRequest()
+		{
+			string browser = HttpContext.Request.Browser.Browser;
+			string user_agent = HttpContext.Request.UserAgent;
+			string url = HttpContext.Request.RawUrl;
+			string ip = HttpContext.Request.UserHostAddress;
+			string referrer = HttpContext.Request.UrlReferrer == null ? "" : HttpContext.Request.UrlReferrer.AbsoluteUri;
+			return "<p>Browser: " + browser + "</p><p>User-Agent: " + user_agent + "</p><p>Url запроса: " + url +
+				"</p><p>Реферер: " + referrer + "</p><p>IP-адрес: " + ip + "</p>";
+		}
+
+		/// <summary>
+		/// Получает данные контекста запроса и выдает ответ в виде другой кодировки.
+		/// </summary>
+		public string GetDataContextRequestWithAnotherCharset()
+		{
+			HttpContext.Response.Charset = "iso-8859-2";
+			HttpContext.Response.Write("<h1>Hello World</h1>");
+
+			string user_agent = HttpContext.Request.UserAgent;
+			string url = HttpContext.Request.RawUrl;
+			string ip = HttpContext.Request.UserHostAddress;
+			string referrer = HttpContext.Request.UrlReferrer == null ? "" : HttpContext.Request.UrlReferrer.AbsoluteUri;
+			return "<p>User-Agent: " + user_agent + "</p><p>Url запроса: " + url +
+				"</p><p>Реферер: " + referrer + "</p><p>IP-адрес: " + ip + "</p>";
+		}
+
+		/// <summary>
+		/// Получает данные по пользователю.
+		/// </summary>
+		public string GetUserData()
+		{
+			string cookieId = HttpContext.Request.Cookies["id"].Value;
+			bool IsAdmin = HttpContext.User.IsInRole("admin"); 
+			bool IsAuth = HttpContext.User.Identity.IsAuthenticated; 
+			string login = HttpContext.User.Identity.Name;
+			string session = (string)Session["name"];
+			
+			//Удаляем значение сессии.
+			Session["name"] = null;
+
+			return "<p>IsAdmin: " + IsAdmin + "</p><p>IsAuth: " + IsAuth +
+				"</p><p>login: " + login + "</p><p> Cookie id: " + cookieId + "</p><p> Session: " + session + "</p>";
 		}
 
 		/// <summary>
