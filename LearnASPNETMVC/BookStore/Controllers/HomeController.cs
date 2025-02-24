@@ -4,6 +4,7 @@
 	using BookStore.Util;
 	using System;
 	using System.Collections.Generic;
+	using System.IO;
 	using System.Web.Mvc;
 
 	/// <summary>
@@ -77,6 +78,19 @@
 			string file_type = "application/png";
 			string file_name = "PDFIcon.png";
 			return File(mas, file_type, file_name);
+		}
+
+		/// <summary>
+		/// Метод действия отправки потока.
+		/// </summary>
+		public FileResult GetStream()
+		{
+			string path = Server.MapPath("~/Assets//test.png");
+
+			FileStream fs = new FileStream(path, FileMode.Open);
+			string file_type = "application/png";
+			string file_name = "PDFIcon.png";
+			return File(fs, file_type, file_name);
 		}
 
 		/// <summary>
