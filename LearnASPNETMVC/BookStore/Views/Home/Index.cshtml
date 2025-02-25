@@ -1,6 +1,15 @@
 ﻿@{
 	Layout = null;
 }
+@helper BookList(IEnumerable<BookStore.Models.Book> books)
+{
+	<ul>
+		@foreach (BookStore.Models.Book b in books)
+		{
+			<li>@b.Name</li>
+		}
+	</ul>
+}
 <div>
 	<h3>Распродажа книг</h3>
 	<table>
@@ -12,14 +21,15 @@
 		</tr>
 		@foreach (BookStore.Models.Book b in ViewBag.Books)
 		{
-		<tr>
-			<td><p>@b.Name</p></td>
-			<td><p>@b.Author</p></td>
-			<td><p>@b.Price</p></td>
-			<td><p><a href="/Home/Buy/@b.Id">Купить</a></p></td>
-		</tr>
+			<tr>
+				<td><p>@b.Name</p></td>
+				<td><p>@b.Author</p></td>
+				<td><p>@b.Price</p></td>
+				<td><p><a href="/Home/Buy/@b.Id">Купить</a></p></td>
+			</tr>
 		}
 	</table>
 	@Html.Partial("Partial")
 	@Html.Partial("PartialCountry", new string[] { "Russia", "USA", "Canada", "France" })
+	@BookList(ViewBag.Books)
 </div>
