@@ -62,4 +62,12 @@
 	<!-- или можно вызвать так -->
 	@ListHelper.CreateList(Html, countries)
 	@Html.Image("/Assets/test.png", "спящий котэ")
+	@Html.CreateListWithAtrributes(new string[] { "Лондон", "Париж", "Берлин" }, new { @class = "btn", id = "citiesList" })
+
+	@Html.RadioButton("color", "red")
+	<span>красный</span> <br />
+	@Html.RadioButton("color", "blue")
+	<span>синий</span> <br />
+	@Html.RadioButton("color", "green", true)
+	<span>зеленый</span>
 </div>
