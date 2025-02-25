@@ -133,6 +133,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ImageHelper.cs" />
+    <Compile Include="Helpers\ListHelper.cs" />
     <Compile Include="Models\Book.cs" />
     <Compile Include="Db\Contexts\BookContext.cs" />
     <Compile Include="Models\Purchase.cs" />
@@ -166,6 +168,7 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="App_Code\MyHelpers.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
