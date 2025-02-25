@@ -10,6 +10,21 @@
 		}
 	</ul>
 }
+@helper CreateList(string[] all)
+{
+	<ul>
+		@foreach (string s in all)
+		{
+			<li>@s</li>
+		}
+	</ul>
+}
+@{
+	string[] cities = new string[] { "Лондон", "Париж", "Москва" };
+}
+@{
+	string[] countries = new string[] { "Великобритания", "Франция", "Россия" };
+}
 <div>
 	<h3>Распродажа книг</h3>
 	<table>
@@ -32,4 +47,9 @@
 	@Html.Partial("Partial")
 	@Html.Partial("PartialCountry", new string[] { "Russia", "USA", "Canada", "France" })
 	@BookList(ViewBag.Books)
+	<h3>Города</h3>
+	@CreateList(cities)
+	<br />
+	<h3>Страны</h3>
+	@CreateList(countries)
 </div>
