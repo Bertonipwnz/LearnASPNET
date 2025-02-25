@@ -5,7 +5,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
-	using System.Security.Policy;
 	using System.Web.Mvc;
 
 	/// <summary>
@@ -25,6 +24,15 @@
 		#region Public Methods
 
 		/// <summary>
+		/// Метод действия возвращения частичного представления.
+		/// </summary>
+		public ActionResult Partial()
+		{
+			ViewBag.Message = "Partial view";
+			return PartialView();
+		}
+
+		/// <summary>
 		/// Отображает страницу.
 		/// </summary>
 		public ActionResult Index()
@@ -40,6 +48,7 @@
 
 			//Установка сесси.
 			Session["name"] = "Tom";
+			ViewBag.Message = "Это вызов частичного представления из обычного";
 
 			return View();
 		}

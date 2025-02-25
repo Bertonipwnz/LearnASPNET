@@ -1,4 +1,5 @@
-﻿@{
+﻿@model BookStore.Models.Purchase
+@{
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -20,4 +21,23 @@
 			<tr><td><input type="submit" value="Отправить" /> </td><td></td></tr>
 		</table>
 	</form>
+	<div>
+		<h3>Форма оформления покупки</h3>
+		@using (Html.BeginForm("Buy", "Home", FormMethod.Post))
+		{
+			@Html.HiddenFor(m => m.BookId)
+			@Html.LabelFor(m => m.Person, "Введите свое имя")
+			<br />
+			@Html.TextBoxFor(m => m.Person)
+			<br /><br />
+			@Html.LabelFor(m => m.Address, "Введите адрес")
+			<br />
+			@Html.TextBoxFor(m => m.Address)
+			<p><input type="submit" value="Отправить" /></p>
+		}
+	</div>
+
+	@section Footer {
+		Все права защищены. Syte Corp. 2025.
+	}
 </div>

@@ -1,6 +1,30 @@
 ﻿@{
 	Layout = null;
 }
+@helper BookList(IEnumerable<BookStore.Models.Book> books)
+{
+	<ul>
+		@foreach (BookStore.Models.Book b in books)
+		{
+			<li>@b.Name</li>
+		}
+	</ul>
+}
+@helper CreateList(string[] all)
+{
+	<ul>
+		@foreach (string s in all)
+		{
+			<li>@s</li>
+		}
+	</ul>
+}
+@{
+	string[] cities = new string[] { "Лондон", "Париж", "Москва" };
+}
+@{
+	string[] countries = new string[] { "Великобритания", "Франция", "Россия" };
+}
 <div>
 	<h3>Распродажа книг</h3>
 	<table>
@@ -10,7 +34,7 @@
 			<td><p>Цена</p></td>
 			<td></td>
 		</tr>
-		@foreach (var b in ViewBag.Books)
+		@foreach (BookStore.Models.Book b in ViewBag.Books)
 		{
 			<tr>
 				<td><p>@b.Name</p></td>
@@ -20,4 +44,30 @@
 			</tr>
 		}
 	</table>
+	@Html.Partial("Partial")
+	@Html.Partial("PartialCountry", new string[] { "Russia", "USA", "Canada", "France" })
+	@BookList(ViewBag.Books)
+	<h3>Города</h3>
+	@CreateList(cities)
+	<br />
+	<h3>Страны</h3>
+	@CreateList(countries)
+	@MyHelpers.HtmlList(new string[] { "Лондон", "Париж", "Берлин" })
+
+	@using BookStore.Helpers
+	<h3>Города</h3>
+	@Html.CreateList(cities)
+	<br />
+	<h3>Страны</h3>
+	<!-- или можно вызвать так -->
+	@ListHelper.CreateList(Html, countries)
+	@Html.Image("/Assets/test.png", "спящий котэ")
+	@Html.CreateListWithAtrributes(new string[] { "Лондон", "Париж", "Берлин" }, new { @class = "btn", id = "citiesList" })
+
+	@Html.RadioButton("color", "red")
+	<span>красный</span> <br />
+	@Html.RadioButton("color", "blue")
+	<span>синий</span> <br />
+	@Html.RadioButton("color", "green", true)
+	<span>зеленый</span>
 </div>
