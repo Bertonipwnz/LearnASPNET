@@ -11,8 +11,8 @@
 	{
 		protected void Application_Start()
 		{
-			//Database.SetInitializer(new BookDbInitializer());
-			DatabaseViaCommand.CreateBookTable();
+			Database.SetInitializer(new BookDbInitializer());
+			DatabaseViaCommand.InvokeLearnQueryes();
 			AreaRegistration.RegisterAllAreas();
 			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
 			RouteConfig.RegisterRoutes(RouteTable.Routes);

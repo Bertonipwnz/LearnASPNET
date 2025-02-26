@@ -17,7 +17,13 @@ namespace BookStore.Db.Contexts
 
 		private const string BOOK_TABLE_NAME = "book";
 
-		public static void CreateBookTable()
+		public static void InvokeLearnQueryes()
+		{
+			CreateBookTable();
+			InsertDataInBookTable("Мастер и маргарита", "Булкагов М.А.", 670.99f, 3);
+		}
+
+		private static void CreateBookTable()
 		{
 #if DEBUG
 			RemoveTable(BOOK_TABLE_NAME);
@@ -25,10 +31,11 @@ namespace BookStore.Db.Contexts
 
 
 #if MY_SQL_SERVER
+			//NVARCHAR - для решения проблем с кодировкой.
 			string sqlQuery = $@"CREATE TABLE {BOOK_TABLE_NAME} (
                         book_id INT PRIMARY KEY IDENTITY, 
-						title VARCHAR(50),
-						author VARCHAR(30),
+						title NVARCHAR(50),
+						author NVARCHAR(30),
 						price DECIMAL(8,2),
 						amount INT
                     )";
@@ -44,7 +51,35 @@ namespace BookStore.Db.Contexts
 			TryExecuteNonQuery(sqlQuery);
 		}
 
-		public static void RemoveTable(string tableName)
+		private static void InsertDataInBookTable(string title, string author, float price, int amount)
+		{
+			string sqlQuery = $@"INSERT INTO {BOOK_TABLE_NAME} (title, author, price, amount) 
+                         VALUES (@Title, @Author, @Price, @Amount)";
+
+			using (SqlConnection connection = new SqlConnection(_connectionString))
+			{
+				connection.Open();
+
+				using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+				{
+					command.Parameters.AddWithValue("@Title", title);
+					command.Parameters.AddWithValue("@Author", author);
+					command.Parameters.AddWithValue("@Price", price);
+					command.Parameters.AddWithValue("@Amount", amount);
+
+
+					command.ExecuteNonQuery(); // Выполнение запроса
+
+					command.Dispose();
+				}
+
+				connection.Close();
+				connection.Dispose();
+			}
+		}
+
+
+		private static void RemoveTable(string tableName)
 		{
 			string sqlQuery = $@"
             IF EXISTS (SELECT * FROM sys.tables WHERE name = '{tableName}')
@@ -54,7 +89,6 @@ namespace BookStore.Db.Contexts
 
 			TryExecuteNonQuery(sqlQuery);
 		}
-
 
 		private static void TryExecuteNonQuery(string sqlQuery)
 		{
