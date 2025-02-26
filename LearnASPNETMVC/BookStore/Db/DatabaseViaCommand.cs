@@ -1,14 +1,19 @@
-﻿namespace BookStore.Db.Contexts
+﻿#define MY_SQL_SERVER
+
+namespace BookStore.Db.Contexts
 {
 	using System;
 	using System.Data.SqlClient;
+
 
 	/// <summary>
 	/// База данных.
 	/// </summary>
 	public class DatabaseViaCommand
 	{
+#if MY_SQL_SERVER
 		private static string _connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename='|DataDirectory|\\Bookstore.mdf';Integrated Security=True";
+#endif
 
 		private const string BOOK_TABLE_NAME = "book";
 
@@ -18,12 +23,24 @@
 			RemoveTable(BOOK_TABLE_NAME);
 #endif
 
-			string sqlQuery = $@"CREATE TABLE {BOOK_TABLE_NAME} (
-                        Id INT PRIMARY KEY IDENTITY,
-                        Name NVARCHAR(100),
-                        Age INT
-                    )";
 
+#if MY_SQL_SERVER
+			string sqlQuery = $@"CREATE TABLE {BOOK_TABLE_NAME} (
+                        book_id INT PRIMARY KEY IDENTITY, 
+						title VARCHAR(50),
+						author VARCHAR(30),
+						price DECIMAL(8,2),
+						amount INT
+                    )";
+#else
+			string sqlQuery = $@"CREATE TABLE {BOOK_TABLE_NAME} (
+                        book_id INT PRIMARY KEY AUTO_INCREMENT, 
+						title VARCHAR(50),
+						author VARCHAR(30),
+						price DECIMAL(8,2),
+						amount INT
+                    )";
+#endif
 			TryExecuteNonQuery(sqlQuery);
 		}
 
