@@ -3,7 +3,9 @@
 namespace BookStore.Db.Contexts
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Data.SqlClient;
+	using System.Diagnostics;
 
 
 	/// <summary>
@@ -21,6 +23,13 @@ namespace BookStore.Db.Contexts
 		{
 			CreateBookTable();
 			InsertDataInBookTable("Мастер и маргарита", "Булкагов М.А.", 670.99f, 3);
+
+			//TODO: Внести данные
+//			INSERT INTO book(title, author, price, amount)
+//VALUES('Белая гвардия', 'Булгаков М.А.', 540.50, 5),
+//       ('Идиот', 'Достоевский Ф.М.', 460.00, 10),
+//       ('Братья Карамазовы', 'Достоевский Ф.М.', 799.01, 2);
+
 		}
 
 		private static void CreateBookTable()
