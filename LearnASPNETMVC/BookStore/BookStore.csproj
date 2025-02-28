@@ -129,6 +129,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\EntityFrameworkController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MySqlCommandController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Db\DatabaseEntityFramework.cs" />
     <Compile Include="Db\DatabaseViaCommand.cs" />
@@ -204,6 +205,7 @@
     <Content Include="Views\Home\Partial.cshtml" />
     <Content Include="Views\Home\PartialCountry.cshtml" />
     <Content Include="Views\EntityFramework\Index.cshtml" />
+    <Content Include="Views\MySqlCommand\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

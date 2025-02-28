@@ -9,7 +9,7 @@
 	public class EntityFrameworkController : Controller
     {
         // GET: EntityFramework
-        public ActionResult Index()
+        public ActionResult GetBooks()
         {
             return View(DatabaseEntityFramework.GetBooks());
         }

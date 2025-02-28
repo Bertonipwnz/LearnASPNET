@@ -15,7 +15,6 @@
 		/// </summary>
 		public static async Task InvokeLearnQueryes()
 		{
-			BookContext db = new BookContext();
 			await DeleteDataTableBookAsync();
 			await InsertInBookAsync("Мастер и маргарита", "Булкагов М.А.", 670.99f, 3);
 			await InsertInBookAsync("Белая гвардия", "Булкагов М.А.", 540.50f, 5);
@@ -24,13 +23,15 @@
 			await InsertInBookAsync("Стихотворения и поэмы", "Есенин С.А.", 650.00f, 15);
 		}
 
+		/// <summary>
+		/// Получает список книг из БД.
+		/// </summary>
 		public static List<Book> GetBooks()
 		{
 			List<Book> books = new List<Book>();
 			using (BookContext db = new BookContext())
 			{
 				books = db.Books.ToList();
-				db.Dispose();
 			}
 
 			return books;
@@ -43,15 +44,13 @@
 		{
 			using (BookContext db = new BookContext())
 			{
-				List<Book> book = db.Books.ToList();
+				// Получаем все записи, но без их загрузки в память
+				var booksToDelete = db.Books.ToList();
 
-				foreach (Book bookItem in book)
-				{
-					db.Books.Remove(bookItem);
-				}
+				// Удаляем все записи за один раз
+				db.Books.RemoveRange(booksToDelete);
 
 				await db.SaveChangesAsync();
-				db.Dispose();
 			}
 		}
 
@@ -77,7 +76,6 @@
 				db.Books.Add(book);
 
 				await db.SaveChangesAsync();
-				db.Dispose();
 			}
 		}
 	}
