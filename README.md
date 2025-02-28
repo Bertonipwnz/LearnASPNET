@@ -1,4 +1,4 @@
 # TODO
-- Реализация запросов через EntityFramework
-- Занести данные в book еще три записи (commands)
-- DatabaseViaCommand добавить комментарий
+- Реализация запросов через EntityFramework - Done
+- Занести данные в book еще три записи (commands) - Done
+- DatabaseViaCommand добавить комментарий - Done

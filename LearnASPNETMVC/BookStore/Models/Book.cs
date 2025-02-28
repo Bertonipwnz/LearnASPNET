@@ -5,12 +5,29 @@
 	/// </summary>
 	public class Book
 	{
-		public int Id { get; set; }
+		/// <summary>
+		/// Айди.
+		/// </summary>
+		public int Book_id { get; set; }
 
-		public string Name { get; set; }
+		/// <summary>
+		/// Наименование.
+		/// </summary>
+		public string Title { get; set; }
 
+		/// <summary>
+		/// Автор.
+		/// </summary>
 		public string Author { get; set; }
 
-		public int Price { get; set; }
+		/// <summary>
+		/// Цена.
+		/// </summary>
+		public float Price { get; set; }
+
+		/// <summary>
+		/// Количество.
+		/// </summary>
+		public int Amount { get; set; }
 	}
 }

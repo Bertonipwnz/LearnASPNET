@@ -14,10 +14,11 @@
 		/// <param name="context">Контекст базы данных <see cref="BookContext"/>, в который будут добавлены данные.</param>
 		protected override void Seed(BookContext context)
 		{
-			context.Books.Add(new Book { Name = "Война и мир", Author = "Л. Толстой", Price = 220 });
-			context.Books.Add(new Book { Name = "Отцы и дети", Author = "И. Тургенев", Price = 180 });
-			context.Books.Add(new Book { Name = "Чайка", Author = "А. Чехов", Price = 150 });
-			context.Books.Add(new Book { Name = "тест", Author = "А. Чехов", Price = 150 });
+			context.Books.Add(new Book { Title = "Мастер и маргарита", Author = "Булкагов М.А.", Price = 670.99f, Amount = 3 });
+			context.Books.Add(new Book { Title = "Белая гвардия", Author = "Булкагов М.А.", Price = 540.50f, Amount = 5 });
+			context.Books.Add(new Book { Title = "Идиот", Author = "Достоевский Ф.М.", Price = 460.00f, Amount =10 });
+			context.Books.Add(new Book { Title = "Братья Карамазовы", Author = "Достоевский Ф.М.", Price = 799.01f, Amount=2 });
+			context.Books.Add(new Book { Title = "Стихотворения и поэмы", Author = "Есенин С.А.", Price = 650.00f, Amount=15 });
 		
 			base.Seed(context);
 		}

@@ -3,35 +3,52 @@
 namespace BookStore.Db.Contexts
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Data.SqlClient;
-	using System.Diagnostics;
-
 
 	/// <summary>
 	/// База данных.
 	/// </summary>
 	public class DatabaseViaCommand
 	{
+		#region Private Fields
+
 #if MY_SQL_SERVER
+		/// <summary>
+		/// Строка соединения с БД.
+		/// </summary>
 		private static string _connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename='|DataDirectory|\\Bookstore.mdf';Integrated Security=True";
 #endif
 
+		/// <summary>
+		/// Имя таблицы с книгами.
+		/// </summary>
 		private const string BOOK_TABLE_NAME = "book";
 
+		#endregion Private Fields
+
+		#region Public Methods
+
+		/// <summary>
+		/// Вызывает запросы которые были в ходе обучения.
+		/// </summary>
 		public static void InvokeLearnQueryes()
 		{
+			//1.1
 			CreateBookTable();
 			InsertDataInBookTable("Мастер и маргарита", "Булкагов М.А.", 670.99f, 3);
-
-			//TODO: Внести данные
-//			INSERT INTO book(title, author, price, amount)
-//VALUES('Белая гвардия', 'Булгаков М.А.', 540.50, 5),
-//       ('Идиот', 'Достоевский Ф.М.', 460.00, 10),
-//       ('Братья Карамазовы', 'Достоевский Ф.М.', 799.01, 2);
-
+			InsertDataInBookTable("Белая гвардия", "Булкагов М.А.", 540.50f, 5);
+			InsertDataInBookTable("Идиот", "Достоевский Ф.М.", 460.00f, 10);
+			InsertDataInBookTable("Братья Карамазовы", "Достоевский Ф.М.", 799.01f, 2);
+			InsertDataInBookTable("Стихотворения и поэмы", "Есенин С.А.", 650.00f, 15);
 		}
 
+		#endregion Public Methods
+
+		#region Private Methods
+
+		/// <summary>
+		/// Создат таблицу книг.
+		/// </summary>
 		private static void CreateBookTable()
 		{
 #if DEBUG
@@ -60,6 +77,13 @@ namespace BookStore.Db.Contexts
 			TryExecuteNonQuery(sqlQuery);
 		}
 
+		/// <summary>
+		/// Выполняет запрос INSERT в таблицу книг.
+		/// </summary>
+		/// <param name="title">Заголовок.</param>
+		/// <param name="author">Автор.</param>
+		/// <param name="price">Цена.</param>
+		/// <param name="amount">Количество.</param>
 		private static void InsertDataInBookTable(string title, string author, float price, int amount)
 		{
 			string sqlQuery = $@"INSERT INTO {BOOK_TABLE_NAME} (title, author, price, amount) 
@@ -76,9 +100,7 @@ namespace BookStore.Db.Contexts
 					command.Parameters.AddWithValue("@Price", price);
 					command.Parameters.AddWithValue("@Amount", amount);
 
-
-					command.ExecuteNonQuery(); // Выполнение запроса
-
+					command.ExecuteNonQuery(); 
 					command.Dispose();
 				}
 
@@ -87,7 +109,10 @@ namespace BookStore.Db.Contexts
 			}
 		}
 
-
+		/// <summary>
+		/// Удаляет таблицу.
+		/// </summary>
+		/// <param name="tableName">Имя таблицы.</param>
 		private static void RemoveTable(string tableName)
 		{
 			string sqlQuery = $@"
@@ -99,6 +124,10 @@ namespace BookStore.Db.Contexts
 			TryExecuteNonQuery(sqlQuery);
 		}
 
+		/// <summary>
+		/// Пытается вызвать sql запрос.
+		/// </summary>
+		/// <param name="sqlQuery">Запрос.</param>
 		private static void TryExecuteNonQuery(string sqlQuery)
 		{
 			try
@@ -121,5 +150,7 @@ namespace BookStore.Db.Contexts
 				Console.WriteLine("Ошибка при выполнении SQL-запроса: " + ex.Message);
 			}
 		}
+
+		#endregion Private Methods
 	}
 }
