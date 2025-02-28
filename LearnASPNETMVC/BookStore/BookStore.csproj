@@ -204,8 +204,8 @@
     <Content Include="Views\Store\Index.cshtml" />
     <Content Include="Views\Home\Partial.cshtml" />
     <Content Include="Views\Home\PartialCountry.cshtml" />
-    <Content Include="Views\EntityFramework\Index.cshtml" />
-    <Content Include="Views\MySqlCommand\Index.cshtml" />
+    <Content Include="Views\EntityFramework\GetBooks.cshtml" />
+    <Content Include="Views\MySqlCommand\GetBooks.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

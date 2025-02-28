@@ -44,6 +44,9 @@ namespace BookStore.Db.Contexts
 			InsertDataInBookTable("Стихотворения и поэмы", "Есенин С.А.", 650.00f, 15);
 		}
 
+		/// <summary>
+		/// Получает книги.
+		/// </summary>
 		public static List<Book> GetBooks()
 		{
 			List<Book> books = new List<Book>();
@@ -67,7 +70,9 @@ namespace BookStore.Db.Contexts
 								BookId = reader.GetInt32(0),
 								Title = reader.GetString(1),
 								Author = reader.GetString(2),
-								Price = reader.GetFloat(3),
+								
+								//TODO: Понять как работать c decimal.
+								Price = (float)reader.GetDecimal(3),
 								Amount = reader.GetInt32(4)
 							};
 
@@ -80,25 +85,25 @@ namespace BookStore.Db.Contexts
 
 			return books;
 		}
-	}
 
-	#endregion Public Methods
 
-	#region Private Methods
+		#endregion Public Methods
 
-	/// <summary>
-	/// Создат таблицу книг.
-	/// </summary>
-	private static void CreateBookTable()
-	{
+		#region Private Methods
+
+		/// <summary>
+		/// Создат таблицу книг.
+		/// </summary>
+		private static void CreateBookTable()
+		{
 #if DEBUG
-		RemoveTable(BOOK_TABLE_NAME);
+			RemoveTable(BOOK_TABLE_NAME);
 #endif
 
 
 #if MY_SQL_SERVER
-		//NVARCHAR - для решения проблем с кодировкой.
-		string sqlQuery = $@"CREATE TABLE {BOOK_TABLE_NAME} (
+			//NVARCHAR - для решения проблем с кодировкой.
+			string sqlQuery = $@"CREATE TABLE {BOOK_TABLE_NAME} (
                         book_id INT PRIMARY KEY IDENTITY, 
 						title NVARCHAR(50),
 						author NVARCHAR(30),
@@ -114,69 +119,32 @@ namespace BookStore.Db.Contexts
 						amount INT
                     )";
 #endif
-		TryExecuteNonQuery(sqlQuery);
-	}
+			TryExecuteNonQuery(sqlQuery);
+		}
 
-	/// <summary>
-	/// Выполняет запрос INSERT в таблицу книг.
-	/// </summary>
-	/// <param name="title">Заголовок.</param>
-	/// <param name="author">Автор.</param>
-	/// <param name="price">Цена.</param>
-	/// <param name="amount">Количество.</param>
-	private static void InsertDataInBookTable(string title, string author, float price, int amount)
-	{
-		string sqlQuery = $@"INSERT INTO {BOOK_TABLE_NAME} (title, author, price, amount) 
+		/// <summary>
+		/// Выполняет запрос INSERT в таблицу книг.
+		/// </summary>
+		/// <param name="title">Заголовок.</param>
+		/// <param name="author">Автор.</param>
+		/// <param name="price">Цена.</param>
+		/// <param name="amount">Количество.</param>
+		private static void InsertDataInBookTable(string title, string author, float price, int amount)
+		{
+			string sqlQuery = $@"INSERT INTO {BOOK_TABLE_NAME} (title, author, price, amount) 
                          VALUES (@Title, @Author, @Price, @Amount)";
 
-		using (SqlConnection connection = new SqlConnection(_connectionString))
-		{
-			connection.Open();
-
-			using (SqlCommand command = new SqlCommand(sqlQuery, connection))
-			{
-				command.Parameters.AddWithValue("@Title", title);
-				command.Parameters.AddWithValue("@Author", author);
-				command.Parameters.AddWithValue("@Price", price);
-				command.Parameters.AddWithValue("@Amount", amount);
-
-				command.ExecuteNonQuery();
-				command.Dispose();
-			}
-
-			connection.Close();
-			connection.Dispose();
-		}
-	}
-
-	/// <summary>
-	/// Удаляет таблицу.
-	/// </summary>
-	/// <param name="tableName">Имя таблицы.</param>
-	private static void RemoveTable(string tableName)
-	{
-		string sqlQuery = $@"
-            IF EXISTS (SELECT * FROM sys.tables WHERE name = '{tableName}')
-            BEGIN
-                DROP TABLE {tableName};
-            END";
-
-		TryExecuteNonQuery(sqlQuery);
-	}
-
-	/// <summary>
-	/// Пытается вызвать sql запрос.
-	/// </summary>
-	/// <param name="sqlQuery">Запрос.</param>
-	private static void TryExecuteNonQuery(string sqlQuery)
-	{
-		try
-		{
 			using (SqlConnection connection = new SqlConnection(_connectionString))
 			{
 				connection.Open();
+
 				using (SqlCommand command = new SqlCommand(sqlQuery, connection))
 				{
+					command.Parameters.AddWithValue("@Title", title);
+					command.Parameters.AddWithValue("@Author", author);
+					command.Parameters.AddWithValue("@Price", price);
+					command.Parameters.AddWithValue("@Amount", amount);
+
 					command.ExecuteNonQuery();
 					command.Dispose();
 				}
@@ -185,12 +153,49 @@ namespace BookStore.Db.Contexts
 				connection.Dispose();
 			}
 		}
-		catch (Exception ex)
-		{
-			Console.WriteLine("Ошибка при выполнении SQL-запроса: " + ex.Message);
-		}
-	}
 
-	#endregion Private Methods
-}
+		/// <summary>
+		/// Удаляет таблицу.
+		/// </summary>
+		/// <param name="tableName">Имя таблицы.</param>
+		private static void RemoveTable(string tableName)
+		{
+			string sqlQuery = $@"
+            IF EXISTS (SELECT * FROM sys.tables WHERE name = '{tableName}')
+            BEGIN
+                DROP TABLE {tableName};
+            END";
+
+			TryExecuteNonQuery(sqlQuery);
+		}
+
+		/// <summary>
+		/// Пытается вызвать sql запрос.
+		/// </summary>
+		/// <param name="sqlQuery">Запрос.</param>
+		private static void TryExecuteNonQuery(string sqlQuery)
+		{
+			try
+			{
+				using (SqlConnection connection = new SqlConnection(_connectionString))
+				{
+					connection.Open();
+					using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+					{
+						command.ExecuteNonQuery();
+						command.Dispose();
+					}
+
+					connection.Close();
+					connection.Dispose();
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("Ошибка при выполнении SQL-запроса: " + ex.Message);
+			}
+		}
+
+		#endregion Private Methods
+	}
 }
