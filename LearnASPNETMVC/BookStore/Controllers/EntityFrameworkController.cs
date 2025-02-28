@@ -8,7 +8,9 @@
 	/// </summary>
 	public class EntityFrameworkController : Controller
     {
-        // GET: EntityFramework
+        /// <summary>
+        /// Получает книги.
+        /// </summary>
         public ActionResult GetBooks()
         {
             return View(DatabaseEntityFramework.GetBooks());

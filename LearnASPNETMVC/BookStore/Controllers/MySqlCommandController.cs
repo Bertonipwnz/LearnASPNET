@@ -8,8 +8,10 @@
 	/// </summary>
 	public class MySqlCommandController : Controller
     {
-        // GET: MySql
-        public ActionResult GetBooks()
+		/// <summary>
+		/// Получает книги.
+		/// </summary>
+		public ActionResult GetBooks()
         {
             return View(DatabaseViaCommand.GetBooks());
         }
