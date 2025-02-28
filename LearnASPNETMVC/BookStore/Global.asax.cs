@@ -2,16 +2,15 @@
 {
 	using BookStore.Db;
 	using BookStore.Db.Contexts;
-	using System.Data.Entity;
 	using System.Web.Mvc;
 	using System.Web.Optimization;
 	using System.Web.Routing;
 
 	public class MvcApplication : System.Web.HttpApplication
 	{
-		protected void Application_Start()
+		protected async void Application_Start()
 		{
-			Database.SetInitializer(new BookDbInitializer());
+			await DatabaseEntityFramework.InvokeLearnQueryes();
 			DatabaseViaCommand.InvokeLearnQueryes();
 			AreaRegistration.RegisterAllAreas();
 			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

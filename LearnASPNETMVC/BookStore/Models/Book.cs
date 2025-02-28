@@ -8,7 +8,7 @@
 		/// <summary>
 		/// Айди.
 		/// </summary>
-		public int Book_id { get; set; }
+		public int BookId { get; set; }
 
 		/// <summary>
 		/// Наименование.

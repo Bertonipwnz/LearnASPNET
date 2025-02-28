@@ -6,7 +6,7 @@
 	<ul>
 		@foreach (BookStore.Models.Book b in books)
 		{
-			<li>@b.Name</li>
+			<li>@b.Title</li>
 		}
 	</ul>
 }
@@ -37,7 +37,7 @@
 		@foreach (BookStore.Models.Book b in ViewBag.Books)
 		{
 			<tr>
-				<td><p>@b.Name</p></td>
+				<td><p>@b.Title</p></td>
 				<td><p>@b.Author</p></td>
 				<td><p>@b.Price</p></td>
 				<td><p><a href="/Home/Buy/@b.Id">Купить</a></p></td>
