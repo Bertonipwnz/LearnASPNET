@@ -39,6 +39,9 @@
 			<td>
 				@Html.DisplayFor(modelItem => item.Amount)
 			</td>
+			<td>
+				@Html.Action("GetPackPrice", "EntityFramework", new { idBook = item.BookId })
+			</td>
 		</tr>
 	}
 </table>
