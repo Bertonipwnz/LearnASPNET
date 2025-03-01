@@ -80,7 +80,7 @@ namespace BookStore.Db.Contexts
 		public static decimal GetNewPriceOnBook(int bookId)
 		{
 			string query = $"SELECT price, " +
-				$"price - (price*30/100)/(1+30/100) AS newPrice " +
+				$"ROUND(price - (price*30/100)/(1+30/100),2) AS newPrice " +
 				$"FROM {BOOK_TABLE_NAME} WHERE book_id = {bookId}";
 
 			using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -95,7 +95,8 @@ namespace BookStore.Db.Contexts
 					{
 						while (reader.Read())
 						{
-							return Math.Round(reader.GetDecimal(1),2);
+							decimal result= reader.GetDecimal(1);
+							return Math.Round(result, 2);
 						}
 					}
 				}
