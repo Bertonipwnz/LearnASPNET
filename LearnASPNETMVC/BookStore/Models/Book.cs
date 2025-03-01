@@ -23,7 +23,7 @@
 		/// <summary>
 		/// Цена.
 		/// </summary>
-		public float Price { get; set; }
+		public decimal Price { get; set; }
 
 		/// <summary>
 		/// Количество.

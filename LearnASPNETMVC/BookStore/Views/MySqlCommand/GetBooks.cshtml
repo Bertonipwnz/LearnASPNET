@@ -1,51 +1,112 @@
 ﻿@model IEnumerable<BookStore.Models.Book>
 
 @{
-    ViewBag.Title = "Index";
+	ViewBag.Title = "Index";
 }
 
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+	@Html.ActionLink("EntityFramework", "GetBooks", "EntityFramework")
 </p>
 <table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Author)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Amount)
-        </th>
-        <th></th>
-    </tr>
+	<tr>
+		<th>
+			@Html.DisplayNameFor(model => model.BookId)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Title)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Author)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Price)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Amount)
+		</th>
+		<th>
+		Pack Price
+		</th>
+		<th>
+			New price
+		</th>
+	</tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Author)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Amount)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.BookId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.BookId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.BookId })
-        </td>
-    </tr>
-}
+	@foreach (var item in Model)
+	{
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.BookId)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Title)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Author)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Price)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Amount)
+			</td>
+			<td>
+				@Html.Action("GetPackPrice", "MySqlCommand", new { idBook = item.BookId })
+			</td>
+			<td>
+				@Html.Action("GetNewPrice", "MySqlCommand", new { idBook = item.BookId })
+			</td>
+		</tr>
+	}
 
+</table>
+
+<table class="table">
+	<tr>
+		<th>
+			@Html.DisplayNameFor(model => model.Title)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Author)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Amount)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Price)
+		</th>
+		<th>
+			New Price with sale 30%
+		</th>
+		<th>
+			New Price on author
+			Если Булгаков - на 10% дороже, Есенин на 5%
+		</th>
+	</tr>
+
+	@foreach (var item in Model)
+	{
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.Title)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Author)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Amount)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Price)
+			</td>
+			<td>
+				@Html.Action("GetNewPrice", "MySqlCommand", new { idBook = item.BookId })
+			</td>
+			<td>
+				@Html.Action("GetNewPriceOnSaleAuthor", "MySqlCommand", new { idBook = item.BookId })
+			</td>
+		</tr>
+	}
 </table>

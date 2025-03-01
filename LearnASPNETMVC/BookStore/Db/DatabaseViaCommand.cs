@@ -37,11 +37,103 @@ namespace BookStore.Db.Contexts
 		{
 			//1.1
 			CreateBookTable();
-			InsertDataInBookTable("Мастер и маргарита", "Булкагов М.А.", 670.99f, 3);
-			InsertDataInBookTable("Белая гвардия", "Булкагов М.А.", 540.50f, 5);
-			InsertDataInBookTable("Идиот", "Достоевский Ф.М.", 460.00f, 10);
-			InsertDataInBookTable("Братья Карамазовы", "Достоевский Ф.М.", 799.01f, 2);
-			InsertDataInBookTable("Стихотворения и поэмы", "Есенин С.А.", 650.00f, 15);
+			InsertDataInBookTable("Мастер и маргарита", "Булкагов М.А.", 670.99m, 3);
+			InsertDataInBookTable("Белая гвардия", "Булкагов М.А.", 540.50m, 5);
+			InsertDataInBookTable("Идиот", "Достоевский Ф.М.", 460.00m, 10);
+			InsertDataInBookTable("Братья Карамазовы", "Достоевский Ф.М.", 799.01m, 2);
+			InsertDataInBookTable("Стихотворения и поэмы", "Есенин С.А.", 650.00m, 15);
+		}
+
+		/// <summary>
+		/// Запрос получения цены упаковки.
+		/// </summary>
+		/// <param name="bookId">Айди книги.</param>
+		public static decimal GetPackPriceOnBook(int bookId)
+		{
+			string query = $"SELECT amount FROM {BOOK_TABLE_NAME} WHERE book_id = {bookId}";
+
+			using (SqlConnection connection = new SqlConnection(_connectionString))
+			{
+				// Открываем соединение с базой данных
+				connection.Open();
+
+				using (SqlCommand command = new SqlCommand(query, connection))
+				{
+					// Выполняем запрос и получаем данные с помощью SqlDataReader
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							return Math.Round(1.65m * reader.GetInt32(0), 2);
+						}
+					}
+				}
+			}
+
+			return 0.0m;
+		}
+
+		/// <summary>
+		/// Получает новую цену на книгу.
+		/// </summary>
+		/// <param name="bookId">Айди книги.</param>
+		public static decimal GetNewPriceOnBook(int bookId)
+		{
+			string query = $"SELECT price, " +
+				$"ROUND(price - (price*30/100)/(1+30/100),2) AS new_price " +
+				$"FROM {BOOK_TABLE_NAME} WHERE book_id = {bookId}";
+
+			using (SqlConnection connection = new SqlConnection(_connectionString))
+			{
+				// Открываем соединение с базой данных
+				connection.Open();
+
+				using (SqlCommand command = new SqlCommand(query, connection))
+				{
+					// Выполняем запрос и получаем данные с помощью SqlDataReader
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							decimal result = reader.GetDecimal(1);
+							return Math.Round(result, 2);
+						}
+					}
+				}
+			}
+
+			return 0.0m;
+		}
+
+		public static decimal GetNewPriceWithSale(int bookId)
+		{
+			//TODO: Разобраться с IF в mysqlserver.
+			string query = $@"SELECT
+        IF(author='Булгаков М.А.', price + (price / 100 * 10), 
+            IF(author='Есенин С.А.',price + (price / 100 * 5),price)) AS new_price
+FROM {BOOK_TABLE_NAME}
+WHERE book_id = {bookId}";
+
+			using (SqlConnection connection = new SqlConnection(_connectionString))
+			{
+				// Открываем соединение с базой данных
+				connection.Open();
+
+				using (SqlCommand command = new SqlCommand(query, connection))
+				{
+					// Выполняем запрос и получаем данные с помощью SqlDataReader
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							decimal result = reader.GetDecimal(0);
+							return Math.Round(result, 2);
+						}
+					}
+				}
+			}
+
+			return 0.0m;
 		}
 
 		/// <summary>
@@ -70,9 +162,7 @@ namespace BookStore.Db.Contexts
 								BookId = reader.GetInt32(0),
 								Title = reader.GetString(1),
 								Author = reader.GetString(2),
-								
-								//TODO: Понять как работать c decimal.
-								Price = (float)reader.GetDecimal(3),
+								Price = reader.GetDecimal(3),
 								Amount = reader.GetInt32(4)
 							};
 
@@ -129,7 +219,7 @@ namespace BookStore.Db.Contexts
 		/// <param name="author">Автор.</param>
 		/// <param name="price">Цена.</param>
 		/// <param name="amount">Количество.</param>
-		private static void InsertDataInBookTable(string title, string author, float price, int amount)
+		private static void InsertDataInBookTable(string title, string author, decimal price, int amount)
 		{
 			string sqlQuery = $@"INSERT INTO {BOOK_TABLE_NAME} (title, author, price, amount) 
                          VALUES (@Title, @Author, @Price, @Amount)";
