@@ -29,5 +29,16 @@
 
 			return Content(DatabaseViaCommand.GetPackPriceOnBook(idBook.Value).ToString());
 		}
+
+		public ActionResult GetNewPrice(int? idBook)
+		{
+			if (!idBook.HasValue)
+			{
+				return Content("00.00");
+			}
+
+			return Content(DatabaseViaCommand.GetNewPriceOnBook(idBook.Value).ToString());
+		}
+
     }
 }
