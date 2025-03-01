@@ -64,7 +64,7 @@ namespace BookStore.Db.Contexts
 					{
 						while (reader.Read())
 						{
-							return Math.Round(1.65m * reader.GetInt32(0),2);
+							return Math.Round(1.65m * reader.GetInt32(0), 2);
 						}
 					}
 				}
@@ -80,7 +80,7 @@ namespace BookStore.Db.Contexts
 		public static decimal GetNewPriceOnBook(int bookId)
 		{
 			string query = $"SELECT price, " +
-				$"ROUND(price - (price*30/100)/(1+30/100),2) AS newPrice " +
+				$"ROUND(price - (price*30/100)/(1+30/100),2) AS new_price " +
 				$"FROM {BOOK_TABLE_NAME} WHERE book_id = {bookId}";
 
 			using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -95,7 +95,38 @@ namespace BookStore.Db.Contexts
 					{
 						while (reader.Read())
 						{
-							decimal result= reader.GetDecimal(1);
+							decimal result = reader.GetDecimal(1);
+							return Math.Round(result, 2);
+						}
+					}
+				}
+			}
+
+			return 0.0m;
+		}
+
+		public static decimal GetNewPriceWithSale(int bookId)
+		{
+			//TODO: Разобраться с IF в mysqlserver.
+			string query = $@"SELECT
+        IF(author='Булгаков М.А.', price + (price / 100 * 10), 
+            IF(author='Есенин С.А.',price + (price / 100 * 5),price)) AS new_price
+FROM {BOOK_TABLE_NAME}
+WHERE book_id = {bookId}";
+
+			using (SqlConnection connection = new SqlConnection(_connectionString))
+			{
+				// Открываем соединение с базой данных
+				connection.Open();
+
+				using (SqlCommand command = new SqlCommand(query, connection))
+				{
+					// Выполняем запрос и получаем данные с помощью SqlDataReader
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							decimal result = reader.GetDecimal(0);
 							return Math.Round(result, 2);
 						}
 					}
