@@ -44,6 +44,31 @@ namespace BookStore.Db.Contexts
 			InsertDataInBookTable("Стихотворения и поэмы", "Есенин С.А.", 650.00f, 15);
 		}
 
+		public static float GetPackPriceOnBook(int bookId)
+		{
+			string query = $"SELECT amount FROM {BOOK_TABLE_NAME} WHERE book_id = {bookId}";
+
+			using (SqlConnection connection = new SqlConnection(_connectionString))
+			{
+				// Открываем соединение с базой данных
+				connection.Open();
+
+				using (SqlCommand command = new SqlCommand(query, connection))
+				{
+					// Выполняем запрос и получаем данные с помощью SqlDataReader
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							return 1.65f * reader.GetInt32(0);
+						}
+					}
+				}
+			}
+
+			return 0.0f;
+		}
+
 		/// <summary>
 		/// Получает книги.
 		/// </summary>

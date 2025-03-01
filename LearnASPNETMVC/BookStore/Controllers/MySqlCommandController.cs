@@ -15,5 +15,15 @@
         {
             return View(DatabaseViaCommand.GetBooks());
         }
+
+		public ActionResult GetPackPrice(int? idBook)
+		{
+			if (!idBook.HasValue)
+			{
+				return Content("00.00");
+			}
+
+			return Content(DatabaseViaCommand.GetPackPriceOnBook(idBook.Value).ToString());
+		}
     }
 }
