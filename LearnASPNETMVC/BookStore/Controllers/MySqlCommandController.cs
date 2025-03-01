@@ -16,6 +16,10 @@
             return View(DatabaseViaCommand.GetBooks());
         }
 
+		/// <summary>
+		/// Получает цену для упаковки.
+		/// </summary>
+		/// <param name="idBook">Айди книги.</param>
 		public ActionResult GetPackPrice(int? idBook)
 		{
 			if (!idBook.HasValue)

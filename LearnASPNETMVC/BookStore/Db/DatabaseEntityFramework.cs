@@ -38,6 +38,22 @@
 		}
 
 		/// <summary>
+		/// Получает цену упаковки.
+		/// </summary>
+		/// <param name="bookId">Айди упаковки.</param>
+		public static float GetPackPriceOnBook(int bookId)
+		{
+			float price = 0.0f;
+
+			using (BookContext db = new BookContext())
+			{
+				price = (db.Books.FirstOrDefault(x => x.BookId == bookId)?.Amount * 1.65f) ?? 0.0f;
+			}
+
+			return price;
+		}
+
+		/// <summary>
 		/// Удаляет данные таблицы книг.
 		/// </summary>
 		private static async Task DeleteDataTableBookAsync()

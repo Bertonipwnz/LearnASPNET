@@ -44,6 +44,10 @@ namespace BookStore.Db.Contexts
 			InsertDataInBookTable("Стихотворения и поэмы", "Есенин С.А.", 650.00f, 15);
 		}
 
+		/// <summary>
+		/// Запрос получения цены упаковки.
+		/// </summary>
+		/// <param name="bookId">Айди книги.</param>
 		public static float GetPackPriceOnBook(int bookId)
 		{
 			string query = $"SELECT amount FROM {BOOK_TABLE_NAME} WHERE book_id = {bookId}";
